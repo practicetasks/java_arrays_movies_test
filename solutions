@@ -1,0 +1,145 @@
+    public Movie findMovieWithLongestTitle(Movie[] movies) {
+        Movie longestTitleMovie = null;
+        int maxLength = 0;
+        for (Movie movie : movies) {
+            if (movie != null && movie.title.length() > maxLength) {
+                longestTitleMovie = movie;
+                maxLength = movie.title.length();
+            }
+        }
+        return longestTitleMovie;
+    }
+
+
+    public Movie findMovieWithMostGenres(Movie[] movies) {
+        Movie maxGenresMovie = null;
+        int maxGenres = 0;
+        for (Movie movie : movies) {
+            if (movie != null && movie.genres.length > maxGenres) {
+                maxGenresMovie = movie;
+                maxGenres = movie.genres.length;
+            }
+        }
+        return maxGenresMovie;
+    }
+
+    public int getAmountOfMoviesInYearRange(Movie[] movies, int startYear, int endYear) {
+        int totalMovies = 0;
+        for (Movie movie : movies) {
+            if (movie != null && movie.releaseYear >= startYear && movie.releaseYear <= endYear) {
+                totalMovies++;
+            }
+        }
+        return totalMovies;
+    }
+
+    public double calculateAverageDurationInYearRange(Movie[] movies, int startYear, int endYear) {
+        int totalDuration = 0;
+        int totalMovies = 0;
+        for (Movie movie : movies) {
+            if (movie != null && movie.releaseYear >= startYear && movie.releaseYear <= endYear) {
+                totalDuration += movie.duration;
+                totalMovies++;
+            }
+        }
+        if (totalMovies == 0) {
+            return 0.0;
+        }
+        return (double) totalDuration / totalMovies;
+    }
+
+    public double[] findHighestAndLowestRatings(Movie[] movies) {
+        double highestRating = Double.MIN_VALUE;
+        double lowestRating = Double.MAX_VALUE;
+        for (Movie movie : movies) {
+            if (movie != null) {
+                double currentRating = movie.rating;
+                if (currentRating > highestRating) {
+                    highestRating = currentRating;
+                }
+                if (currentRating < lowestRating) {
+                    lowestRating = currentRating;
+                }
+            }
+        }
+        return new double[]{lowestRating, highestRating};
+    }
+
+    public Movie[] findMoviesByRating(Movie[] movies, double rating) {
+        int count = 0;
+        for (Movie movie : movies) {
+            if (movie != null && Double.compare(movie.rating, rating) == 0) {
+                count++;
+            }
+        }
+        Movie[] moviesWithRating = new Movie[count];
+        int index = 0;
+        for (Movie movie : movies) {
+            if (movie != null && Double.compare(movie.rating, rating) == 0) {
+                moviesWithRating[index] = movie;
+                index++;
+            }
+        }
+        return moviesWithRating;
+    }
+
+
+    public String findMostPopularGenre(Movie[] movies) {
+        String[] genres = getAllGenres(movies);
+        int[] genreCounts = new int[genres.length];
+
+        for (Movie movie : movies) {
+            if (movie != null) {
+                String[] movieGenres = movie.genres;
+                for (String genre : movieGenres) {
+                    for (int i = 0; i < genres.length; i++) {
+                        if (genre.equals(genres[i])) {
+                            genreCounts[i]++;
+                        }
+                    }
+                }
+            }
+        }
+
+        String mostPopularGenre = "";
+        int maxCount = 0;
+        for (int i = 0; i < genreCounts.length; i++) {
+            if (genreCounts[i] > maxCount) {
+                maxCount = genreCounts[i];
+                mostPopularGenre = genres[i];
+            }
+        }
+
+        return mostPopularGenre;
+    }
+
+
+    public String[] getAllGenres(Movie[] movies) {
+        String[] genresArray = new String[0];
+        for (Movie movie : movies) {
+            for (String genre : movie.genres) {
+                if (!contains(genresArray, genre)) {
+                    genresArray = addElement(genresArray, genre);
+                }
+            }
+        }
+        return genresArray;
+    }
+
+    private boolean contains(String[] array, String element) {
+        for (String value : array) {
+            if (value != null && value.equals(element)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String[] addElement(String[] array, String element) {
+        String[] newArray = new String[array.length + 1];
+        for (int i = 0; i < array.length; i++) {
+            newArray[i] = array[i];
+        }
+        newArray[array.length] = element;
+        return newArray;
+    }
